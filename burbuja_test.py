@@ -31,12 +31,32 @@ def _comparar_curvas(fitted_a, fitted_b):
     gp.plot((xs_a, ys_a), (xs_b, ys_b), _with='lines', terminal='dumb 60,30',
             unset='grid', title='Comparación', xlabel='n', ylabel='tiempo')
 
+####
 
 def generar_aleatorio(n):
     A = list(range(0, n))
     shuffle(A)
 
     return A
+
+def generar_mejor(n):
+    A = list(range(0, n))
+    
+    return A
+
+def generar_promedio(n):
+    A = list(range(0, n))
+    shuffle(A)
+
+    return A
+
+def generar_peor(n):
+    A = list(range(n,-1,-1))
+
+    return A
+    
+    
+####
 
 
 class PruebasBurbuja(unittest.TestCase):
@@ -82,12 +102,39 @@ class PruebasBurbuja(unittest.TestCase):
 
 
     def test_mejor_caso(self):
-        self.fail('Pendiente de implementar')
+        print()
+        best, fitted = big_o.big_o(burbuja_optimizado, generar_mejor, min_n=10, max_n=1000,
+                                   n_measures=100, n_repeats=3, verbose=False,
+                                   classes=[cmpl.Linear, cmpl.Quadratic], return_raw_data=True)
 
+        _graficar(fitted, 'burbuja_optimizado')
 
+        if not isinstance(best, big_o.complexities.Linear):
+            warnings.warn(
+                f'Complejidad esperada Linear, complejidad estimada {best}')
+        
+        
     def test_peor_caso(self):
-        self.fail('Pendiente de implementar')
+        print()
+        best, fitted = big_o.big_o(burbuja_optimizado, generar_peor, min_n=10, max_n=1000,
+                                   n_measures=100, n_repeats=3, verbose=False,
+                                   classes=[cmpl.Linear, cmpl.Quadratic], return_raw_data=True)
+
+        _graficar(fitted, 'burbuja_optimizado')
+
+        if not isinstance(best, big_o.complexities.Quadratic):
+            warnings.warn(
+                f'Complejidad esperada Quadratic, complejidad estimada {best}')
 
 
     def test_caso_promedio(self):
-        self.fail('Pendiente de implementar')
+        print()
+        best, fitted = big_o.big_o(burbuja_optimizado, generar_promedio, min_n=10, max_n=1000,
+                                   n_measures=100, n_repeats=3, verbose=False,
+                                   classes=[cmpl.Linear, cmpl.Quadratic], return_raw_data=True)
+
+        _graficar(fitted, 'burbuja_optimizado')
+
+        if not isinstance(best, big_o.complexities.Quadratic):
+            warnings.warn(
+                f'Complejidad esperada Quadratic, complejidad estimada {best}')
